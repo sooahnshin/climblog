@@ -190,12 +190,12 @@ The token is saved only in that browser's local storage for your ClimbLog site. 
 ## 9. Verify Sync
 
 1. Unlock owner mode on your first device.
-2. Add one log entry.
+2. Add one log.
 3. Click `Sync now`.
-4. Open `/logs` on your Worker URL and confirm the entry appears in JSON.
+4. Open `/logs` on your Worker URL and confirm the log appears in JSON.
 5. Open ClimbLog on your second device.
 6. Refresh or click `Sync now`.
-7. Confirm the same entry appears.
+7. Confirm the same log appears.
 
 ## Template Caveat
 

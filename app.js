@@ -174,7 +174,7 @@ async function handleSubmit(event) {
   }
 
   const now = new Date().toISOString();
-  const message = state.editingId ? "Entry updated." : "Entry saved.";
+  const message = state.editingId ? "Log updated." : "Log saved.";
 
   if (state.editingId) {
     const index = state.logs.findIndex((entry) => entry.id === state.editingId && !entry.deletedAt);
@@ -215,7 +215,7 @@ function resetForm(options = {}) {
   state.editingId = null;
   state.selectedType = "bouldering";
   els.formTitle.textContent = "Log training";
-  els.saveEntry.textContent = "Save entry";
+  els.saveEntry.textContent = "Save log";
   els.cancelEdit.classList.add("hidden");
   setEntryDate(localDateKey(new Date()));
   els.duration.value = "90";
@@ -337,7 +337,7 @@ function renderSelectedDay() {
   if (!state.selectedDate) {
     els.dayPanel.classList.add("hidden");
     els.dayTitle.textContent = "Selected day";
-    els.daySummary.textContent = "Click a heatmap day to inspect entries";
+    els.daySummary.textContent = "Click a heatmap day to inspect logs";
     els.dayEntryList.replaceChildren();
     return;
   }
@@ -347,7 +347,7 @@ function renderSelectedDay() {
     .sort(compareLogsDesc);
   const totalMinutes = entries.reduce((sum, entry) => sum + entry.durationMinutes, 0);
   const score = buildDailyScores(entries).get(state.selectedDate) || 0;
-  const entryLabel = entries.length === 1 ? "entry" : "entries";
+  const entryLabel = entries.length === 1 ? "log" : "logs";
 
   els.dayPanel.classList.remove("hidden");
   els.dayTitle.textContent = formatDateLong(dateFromKey(state.selectedDate));
@@ -356,7 +356,7 @@ function renderSelectedDay() {
   if (entries.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "No entries for this day.";
+    empty.textContent = "No logs for this day.";
     els.dayEntryList.replaceChildren(empty);
     return;
   }
@@ -483,12 +483,12 @@ function scoreToLevel(score) {
 function renderHistory() {
   const sorted = getVisibleLogs().sort(compareLogsDesc);
   const recent = sorted.slice(0, 30);
-  els.historyCount.textContent = sorted.length === 1 ? "1 entry" : `${sorted.length} entries`;
+  els.historyCount.textContent = sorted.length === 1 ? "1 log" : `${sorted.length} logs`;
 
   if (recent.length === 0) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
-    empty.textContent = "No entries yet.";
+    empty.textContent = "No logs yet.";
     els.historyList.replaceChildren(empty);
     return;
   }
@@ -579,8 +579,8 @@ function editEntry(id) {
 
   state.editingId = id;
   state.selectedType = entry.type;
-  els.formTitle.textContent = "Edit entry";
-  els.saveEntry.textContent = "Update entry";
+  els.formTitle.textContent = "Edit log";
+  els.saveEntry.textContent = "Update log";
   els.cancelEdit.classList.remove("hidden");
   setEntryDate(entry.date);
   els.duration.value = String(entry.durationMinutes);
@@ -592,7 +592,7 @@ function editEntry(id) {
     els.duration.value = String(entry.durationMinutes);
   }
   els.notes.value = entry.notes || "";
-  setFormStatus("Editing an existing entry.");
+  setFormStatus("Editing an existing log.");
   renderActivityChips();
   els.form.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -630,7 +630,7 @@ async function deleteEntry(id) {
   }
   saveLogs();
   render();
-  await syncAfterLocalWrite("Entry deleted.", setFormStatus);
+  await syncAfterLocalWrite("Log deleted.", setFormStatus);
 }
 
 function exportBackup() {
@@ -683,7 +683,7 @@ async function importBackup(event) {
     render();
 
     const changedCount = Math.max(0, getVisibleLogs().length - beforeCount);
-    await syncAfterLocalWrite(`Imported ${changedCount} new or updated entries.`, setBackupStatus);
+    await syncAfterLocalWrite(`Imported ${changedCount} new or updated logs.`, setBackupStatus);
   } catch (error) {
     setBackupStatus(error instanceof Error ? error.message : "Import failed.");
   } finally {
@@ -771,8 +771,8 @@ async function refreshFromRemote(options = {}) {
       state.logs = localLogs.sort(compareLogsDesc);
       render();
       setSyncStatus(canWrite()
-        ? "Shared log is empty; click Sync now to publish local entries."
-        : "Shared log is empty; unlock owner mode to publish local entries.");
+        ? "Shared log is empty; click Sync now to publish local logs."
+        : "Shared log is empty; unlock owner mode to publish local logs.");
       return true;
     }
 
