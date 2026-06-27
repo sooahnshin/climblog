@@ -336,6 +336,7 @@ textarea:focus-visible {
 .field-row {
   display: grid;
   gap: 7px;
+  min-width: 0;
 }
 
 label,
@@ -585,6 +586,10 @@ body.read-only .content-grid {
   }
 
   #entry-date {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     height: 44px;
     min-height: 44px;
     padding: 10px 11px;
