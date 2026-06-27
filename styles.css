@@ -174,6 +174,7 @@ main {
   overflow-y: hidden;
   padding-bottom: 4px;
   scrollbar-color: var(--line-strong) transparent;
+  container-type: inline-size;
 }
 
 .heatmap-scroll:focus-visible,
@@ -626,6 +627,12 @@ body.read-only .content-grid {
 
   .sync-actions {
     justify-content: flex-start;
+  }
+}
+
+@media (min-width: 761px) {
+  .heatmap-scroll {
+    --cell: clamp(12px, calc((100cqw - var(--label-width) - 212px) / 53), 15px);
   }
 }
 
