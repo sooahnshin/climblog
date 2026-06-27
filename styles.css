@@ -583,6 +583,22 @@ body.read-only .content-grid {
   .sync-actions {
     justify-content: flex-start;
   }
+
+  #entry-date {
+    height: 44px;
+    min-height: 44px;
+    padding: 10px 11px;
+    line-height: 1.2;
+  }
+
+  #entry-date::-webkit-datetime-edit {
+    padding: 0;
+  }
+
+  #entry-date::-webkit-date-and-time-value {
+    min-height: 0;
+    text-align: left;
+  }
 }
 
 @media (max-width: 640px) {

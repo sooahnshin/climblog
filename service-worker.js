@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "climblog-static-v7";
+const CACHE_NAME = "climblog-static-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
