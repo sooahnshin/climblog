@@ -120,3 +120,7 @@ Serve this repo from `main` and `/ (root)` in GitHub Pages settings. The app use
 ```text
 https://<github-username>.github.io/climblog/
 ```
+
+## Credits
+
+ClimbLog was inspired by [sou412/ClimbTrack](https://github.com/sou412/ClimbTrack). That repository is private, so the link may only be accessible to collaborators.
