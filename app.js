@@ -4,7 +4,9 @@ const STORAGE_KEY = "climblog.logs.v1";
 const OWNER_TOKEN_KEY = "climblog.ownerToken.v1";
 const BACKUP_VERSION = 1;
 const SYNC_DOCUMENT_VERSION = 1;
-const HEATMAP_WEEKS = 53;
+const DESKTOP_HEATMAP_WEEKS = 53;
+const PHONE_HEATMAP_WEEKS = 22;
+const PHONE_HEATMAP_QUERY = "(max-width: 640px)";
 
 const ACTIVITY_TYPES = [
   { id: "board", label: "Board", weight: 1.0 },
@@ -32,6 +34,7 @@ const state = {
   ownerToken: "",
   syncConfigured: false,
   isSyncing: false,
+  heatmapWeeks: DESKTOP_HEATMAP_WEEKS,
   lastSyncedAt: null
 };
 
@@ -49,6 +52,7 @@ async function init() {
   state.syncConfigured = Boolean(state.apiUrl);
   state.ownerToken = loadOwnerToken();
   state.logs = loadLogs();
+  state.heatmapWeeks = getHeatmapWeeks();
   els.date.value = localDateKey(new Date());
   renderActivityChips();
   renderDurationOptions();
@@ -110,6 +114,7 @@ function bindEvents() {
   els.ownerToggle.addEventListener("click", toggleOwnerMode);
   els.ownerForm.addEventListener("submit", saveOwnerToken);
   els.clearDay.addEventListener("click", clearSelectedDay);
+  window.addEventListener("resize", handleViewportChange);
 }
 
 function renderActivityChips() {
@@ -228,12 +233,13 @@ function render() {
 
 function renderHeatmap() {
   const today = startOfLocalDay(new Date());
-  const firstDate = startOfWeek(addDays(today, -7 * (HEATMAP_WEEKS - 1)));
+  const weekCount = state.heatmapWeeks;
+  const firstDate = startOfWeek(addDays(today, -7 * (weekCount - 1)));
   const scores = buildDailyScores(getVisibleLogs());
   const todayKey = localDateKey(today);
   const cells = [];
 
-  for (let week = 0; week < HEATMAP_WEEKS; week += 1) {
+  for (let week = 0; week < weekCount; week += 1) {
     for (let day = 0; day < 7; day += 1) {
       const date = addDays(firstDate, week * 7 + day);
       const dateKey = localDateKey(date);
@@ -249,7 +255,8 @@ function renderHeatmap() {
     }
   }
 
-  renderMonthLabels(firstDate);
+  setHeatmapColumns(weekCount);
+  renderMonthLabels(firstDate, weekCount);
   els.heatmapGrid.replaceChildren(...cells.map((cell) => createHeatmapCell(cell, todayKey)));
   els.heatmapRange.textContent = `${formatDateShort(firstDate)} - ${formatDateShort(today)}`;
   els.todayScore.textContent = `Today ${(scores.get(todayKey) || 0).toFixed(1)}`;
@@ -280,6 +287,32 @@ function createHeatmapCell(cell, todayKey) {
     render();
   });
   return button;
+}
+
+function handleViewportChange() {
+  const nextWeekCount = getHeatmapWeeks();
+  if (nextWeekCount === state.heatmapWeeks) {
+    return;
+  }
+
+  state.heatmapWeeks = nextWeekCount;
+  render();
+}
+
+function getHeatmapWeeks() {
+  if (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia(PHONE_HEATMAP_QUERY).matches
+  ) {
+    return PHONE_HEATMAP_WEEKS;
+  }
+  return DESKTOP_HEATMAP_WEEKS;
+}
+
+function setHeatmapColumns(weekCount) {
+  els.monthRow.style.gridTemplateColumns = `var(--label-width) repeat(${weekCount}, var(--cell))`;
+  els.heatmapGrid.style.gridTemplateColumns = `repeat(${weekCount}, var(--cell))`;
 }
 
 function clearSelectedDay() {
@@ -373,13 +406,13 @@ function createDayEntryItem(entry) {
   return item;
 }
 
-function renderMonthLabels(firstDate) {
+function renderMonthLabels(firstDate, weekCount) {
   const fragment = document.createDocumentFragment();
   const spacer = document.createElement("span");
   fragment.append(spacer);
 
   let lastMonth = "";
-  for (let week = 0; week < HEATMAP_WEEKS; week += 1) {
+  for (let week = 0; week < weekCount; week += 1) {
     const weekStart = addDays(firstDate, week * 7);
     const labelDate = findMonthLabelDate(weekStart);
     if (!labelDate) {

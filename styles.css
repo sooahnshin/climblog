@@ -591,9 +591,9 @@ body.read-only .content-grid {
 
 @media (max-width: 430px) {
   :root {
-    --cell: 11px;
-    --cell-gap: 4px;
-    --label-width: 32px;
+    --cell: 10px;
+    --cell-gap: 3px;
+    --label-width: 30px;
   }
 
   .heatmap-card-header {
