@@ -107,7 +107,12 @@
 
             <div class="field-row">
               <label for="entry-date">Date</label>
-              <input id="entry-date" name="date" type="date" required>
+              <div class="date-control">
+                <input class="native-date-input" id="entry-date" name="date" type="date" required>
+                <button class="date-display-button" id="entry-date-button" type="button" tabindex="-1" aria-hidden="true">
+                  <span id="entry-date-display">Select date</span>
+                </button>
+              </div>
             </div>
 
             <fieldset class="activity-field">

@@ -53,7 +53,7 @@ async function init() {
   state.ownerToken = loadOwnerToken();
   state.logs = loadLogs();
   state.heatmapWeeks = getHeatmapWeeks();
-  els.date.value = localDateKey(new Date());
+  setEntryDate(localDateKey(new Date()));
   renderActivityChips();
   renderDurationOptions();
   bindEvents();
@@ -69,6 +69,7 @@ function collectElements() {
   els.formStatus = document.querySelector("#form-status");
   els.cancelEdit = document.querySelector("#cancel-edit");
   els.date = document.querySelector("#entry-date");
+  els.dateDisplay = document.querySelector("#entry-date-display");
   els.duration = document.querySelector("#duration");
   els.notes = document.querySelector("#notes");
   els.saveEntry = document.querySelector("#save-entry");
@@ -101,6 +102,8 @@ function collectElements() {
 function bindEvents() {
   els.form.addEventListener("submit", handleSubmit);
   els.cancelEdit.addEventListener("click", resetForm);
+  els.date.addEventListener("change", syncDateDisplay);
+  els.date.addEventListener("input", syncDateDisplay);
   els.exportData.addEventListener("click", exportBackup);
   els.importTrigger.addEventListener("click", () => {
     if (!canWrite()) {
@@ -214,7 +217,7 @@ function resetForm(options = {}) {
   els.formTitle.textContent = "Log training";
   els.saveEntry.textContent = "Save entry";
   els.cancelEdit.classList.add("hidden");
-  els.date.value = localDateKey(new Date());
+  setEntryDate(localDateKey(new Date()));
   els.duration.value = "90";
   els.notes.value = "";
   if (!options.keepStatus) {
@@ -229,6 +232,16 @@ function render() {
   renderHistory();
   renderSummary();
   updateAccessMode();
+}
+
+function setEntryDate(dateKey) {
+  els.date.value = dateKey;
+  syncDateDisplay();
+}
+
+function syncDateDisplay() {
+  const dateKey = els.date.value;
+  els.dateDisplay.textContent = isValidDateKey(dateKey) ? formatDateKey(dateKey) : "Select date";
 }
 
 function renderHeatmap() {
@@ -281,7 +294,7 @@ function createHeatmapCell(cell, todayKey) {
   button.addEventListener("click", () => {
     state.selectedDate = cell.dateKey;
     if (canWrite()) {
-      els.date.value = cell.dateKey;
+      setEntryDate(cell.dateKey);
       setFormStatus(`Selected ${formatDateLong(cell.date)}.`);
     }
     render();
@@ -569,7 +582,7 @@ function editEntry(id) {
   els.formTitle.textContent = "Edit entry";
   els.saveEntry.textContent = "Update entry";
   els.cancelEdit.classList.remove("hidden");
-  els.date.value = entry.date;
+  setEntryDate(entry.date);
   els.duration.value = String(entry.durationMinutes);
   if (!Array.from(els.duration.options).some((option) => option.value === String(entry.durationMinutes))) {
     const option = document.createElement("option");
