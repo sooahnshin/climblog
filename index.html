@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#121315">
+    <meta name="description" content="ClimbLog is a tiny private training log with an activity heatmap.">
+    <title>ClimbLog</title>
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header" aria-label="ClimbLog">
+        <div>
+          <p class="eyebrow">Training log</p>
+          <h1>ClimbLog</h1>
+        </div>
+        <div class="header-metrics" aria-label="Recent training summary">
+          <span class="mode-pill" id="mode-pill">Local</span>
+          <span><strong id="total-hours">0</strong>h</span>
+          <span><strong id="active-days">0</strong>d</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="heatmap-card" aria-labelledby="heatmap-title">
+          <div class="heatmap-card-header">
+            <div>
+              <h2 id="heatmap-title">ClimbLog</h2>
+              <p id="heatmap-range">Last 12 months</p>
+            </div>
+            <div class="score-pill" id="today-score">Today 0.0</div>
+          </div>
+
+          <div class="heatmap-scroll" aria-label="Training activity heatmap" tabindex="0">
+            <div class="month-row" id="month-row" aria-hidden="true"></div>
+            <div class="heatmap-body">
+              <div class="day-labels" aria-hidden="true">
+                <span>Sun</span>
+                <span></span>
+                <span>Tue</span>
+                <span></span>
+                <span>Thu</span>
+                <span></span>
+                <span>Sat</span>
+              </div>
+              <div class="heatmap-grid" id="heatmap-grid" role="grid" aria-label="Daily training activity"></div>
+            </div>
+          </div>
+
+          <div class="heatmap-footer">
+            <div class="heatmap-legend" aria-label="Heatmap intensity legend">
+              <span>Less</span>
+              <span class="legend-cell level-0"></span>
+              <span class="legend-cell level-1"></span>
+              <span class="legend-cell level-2"></span>
+              <span class="legend-cell level-3"></span>
+              <span class="legend-cell level-4"></span>
+              <span>More</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel day-panel hidden" id="day-panel" aria-labelledby="day-title">
+          <div class="panel-header">
+            <div>
+              <h2 id="day-title">Selected day</h2>
+              <p id="day-summary">Click a heatmap day to inspect entries</p>
+            </div>
+            <button class="ghost-button" type="button" id="clear-day">Clear</button>
+          </div>
+          <div class="day-entry-list" id="day-entry-list"></div>
+        </section>
+
+        <section class="panel sync-panel" aria-labelledby="sync-title">
+          <div class="panel-header">
+            <div>
+              <h2 id="sync-title">Sync</h2>
+              <p id="sync-status" aria-live="polite">Local cache ready</p>
+            </div>
+            <div class="sync-actions">
+              <button class="secondary-button" type="button" id="sync-now">Sync now</button>
+              <button class="ghost-button" type="button" id="owner-toggle">Owner mode</button>
+            </div>
+          </div>
+          <form class="owner-form hidden" id="owner-form">
+            <div class="field-row">
+              <label for="owner-token">Owner token</label>
+              <input id="owner-token" name="ownerToken" type="password" autocomplete="off" spellcheck="false">
+            </div>
+            <button class="primary-button" type="submit">Save token</button>
+          </form>
+        </section>
+
+        <section class="content-grid">
+          <form class="panel log-panel write-only" id="log-form">
+            <div class="panel-header">
+              <div>
+                <h2 id="form-title">Log training</h2>
+                <p id="form-status" aria-live="polite"></p>
+              </div>
+              <button class="ghost-button hidden" type="button" id="cancel-edit">Cancel</button>
+            </div>
+
+            <div class="field-row">
+              <label for="entry-date">Date</label>
+              <input id="entry-date" name="date" type="date" required>
+            </div>
+
+            <fieldset class="activity-field">
+              <legend>Activity</legend>
+              <div class="activity-chips" id="activity-chips"></div>
+            </fieldset>
+
+            <div class="field-row">
+              <label for="duration">Duration</label>
+              <select id="duration" name="durationMinutes" required></select>
+            </div>
+
+            <div class="field-row">
+              <label for="notes">Notes</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Session notes"></textarea>
+            </div>
+
+            <button class="primary-button" id="save-entry" type="submit">Save entry</button>
+          </form>
+
+          <section class="panel history-panel" aria-labelledby="history-title">
+            <div class="panel-header">
+              <div>
+                <h2 id="history-title">Recent entries</h2>
+                <p id="history-count">No entries yet</p>
+              </div>
+            </div>
+            <div class="history-list" id="history-list"></div>
+          </section>
+        </section>
+
+        <section class="panel backup-panel" aria-labelledby="backup-title">
+          <div class="panel-header">
+            <div>
+              <h2 id="backup-title">Backup</h2>
+              <p id="backup-status" aria-live="polite">Export visible data</p>
+            </div>
+          </div>
+          <div class="backup-actions">
+            <button class="secondary-button" type="button" id="export-data">Export JSON</button>
+            <button class="secondary-button write-only" type="button" id="import-trigger">Import JSON</button>
+            <input class="visually-hidden" id="import-data" type="file" accept="application/json,.json">
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./config.js"></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

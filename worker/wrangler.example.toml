@@ -1,0 +1,13 @@
+name = "climblog-api"
+main = "worker/worker.js"
+compatibility_date = "2026-06-27"
+
+[[kv_namespaces]]
+binding = "CLIMBLOG_KV"
+id = "<production-kv-namespace-id>"
+preview_id = "<preview-kv-namespace-id>"
+
+# Optional: lock browser access to your deployed ClimbLog origin.
+# The default Worker code uses "*" when this variable is omitted.
+# [vars]
+# CORS_ORIGIN = "https://<github-username>.github.io"
