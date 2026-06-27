@@ -123,4 +123,4 @@ https://<github-username>.github.io/climblog/
 
 ## Credits
 
-ClimbLog was inspired by [sou412/ClimbTrack](https://github.com/sou412/ClimbTrack). That repository is private, so the link may only be accessible to collaborators.
+ClimbLog was inspired by [sou412/ClimbTrack](https://github.com/sou412/ClimbTrack).
