@@ -242,16 +242,16 @@ textarea:focus-visible {
 
 .heatmap-cell.today {
   outline: 2px solid #f4f8ed;
-  outline-offset: 1px;
+  outline-offset: -2px;
 }
 
 .heatmap-cell.selected {
   outline: 2px solid var(--warning);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
 .heatmap-cell.today.selected {
-  box-shadow: 0 0 0 1px #f4f8ed;
+  box-shadow: inset 0 0 0 1px #f4f8ed;
 }
 
 .level-0 {
@@ -585,11 +585,27 @@ body.read-only .content-grid {
   }
 }
 
+@media (max-width: 640px) {
+  :root {
+    --cell: 12px;
+    --cell-gap: 3px;
+    --label-width: 28px;
+  }
+
+  .month-row {
+    font-size: 0.68rem;
+  }
+
+  .day-labels {
+    font-size: 0.62rem;
+  }
+}
+
 @media (max-width: 430px) {
   :root {
-    --cell: 8px;
-    --cell-gap: 2px;
-    --label-width: 26px;
+    --cell: clamp(9px, calc((100vw - 152px) / 22), 12px);
+    --cell-gap: 3px;
+    --label-width: 28px;
   }
 
   .heatmap-card {
@@ -607,5 +623,17 @@ body.read-only .content-grid {
 
   .backup-actions > * {
     width: 100%;
+  }
+}
+
+@media (max-width: 350px) {
+  :root {
+    --cell: clamp(8.5px, calc((100vw - 122px) / 22), 10px);
+    --cell-gap: 2px;
+    --label-width: 24px;
+  }
+
+  .heatmap-card {
+    padding: 10px;
   }
 }
