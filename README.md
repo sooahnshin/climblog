@@ -125,6 +125,6 @@ Serve this repo from `main` and `/ (root)` in GitHub Pages settings. The app use
 https://<github-username>.github.io/climblog/
 ```
 
-## Credits
+## Acknowledgments
 
 ClimbLog was inspired by [sou412/ClimbTrack](https://github.com/sou412/ClimbTrack).
