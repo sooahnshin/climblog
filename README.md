@@ -6,6 +6,14 @@
 
 ClimbLog is a tiny installable web app for logging climbing training and showing a widget-style activity heatmap.
 
+Live demo:
+
+```text
+https://sooahnshin.github.io/climblog/
+```
+
+![ClimbLog screenshot](./docs/images/climblog-home.png)
+
 It is built as a static PWA with a minimal sync backend:
 
 - Anyone with the app URL can read the heatmap and logs.
@@ -71,14 +79,14 @@ The repo should not contain:
 - Cloudflare account secrets
 - the owner write token
 
-The public API URL is not a write secret because public read is intentional, but it can reveal which Worker serves the shared logs. Keep the checked-in `config.js` in local-only/template mode unless you are comfortable with everyone reading from that Worker. The write token remains the write boundary.
+The public API URL is not a write secret because public read is intentional, but it can reveal which Worker serves the shared logs. This public example points `config.js` at a sample Worker/KV endpoint with generic seed data. Use your own Worker URL for your own logs. The write token remains the write boundary.
 
 ## Files
 
 - `index.html` - app shell
 - `styles.css` - layout, heatmap, owner mode, and controls
 - `app.js` - logging, heatmap scoring, local cache, backup import/export, and sync
-- `config.js` - checked-in frontend sync config; blank by default for local-only/template mode
+- `config.js` - checked-in frontend sync config; points to the live sample endpoint
 - `config.example.js` - placeholder config for template users
 - `worker/worker.js` - public-read / owner-write Cloudflare Worker API
 - `worker/wrangler.example.toml` - example Worker deployment config
@@ -102,6 +110,16 @@ Then open:
 http://127.0.0.1:4173/
 ```
 
+## Install On iPhone
+
+Open the ClimbLog URL in Safari on iPhone:
+
+```text
+https://sooahnshin.github.io/climblog/
+```
+
+Then tap Share, choose `Add to Home Screen`, and tap `Add`. ClimbLog will open like a standalone app from the home screen.
+
 ## Create Your Own
 
 To fork or clone this into your own ClimbLog instance, read [CREATE_YOUR_OWN.md](./CREATE_YOUR_OWN.md).
@@ -115,7 +133,7 @@ High-level setup:
 5. Deploy the static frontend with GitHub Pages.
 6. Unlock owner mode on your phone/Mac with the same token.
 
-If you clone a public copy of this repo, copy `config.example.js` to `config.js` and replace the placeholder with your own Worker URL before deploying. The checked-in `config.js` intentionally does not point at a live API.
+If you clone a public copy of this repo, copy `config.example.js` to `config.js` and replace the placeholder with your own Worker URL before deploying. The checked-in `config.js` points at the sample endpoint so the demo works immediately, but your own deployment should use your own Worker/KV pair.
 
 ## GitHub Pages
 
