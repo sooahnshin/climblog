@@ -7,6 +7,9 @@ const SYNC_DOCUMENT_VERSION = 1;
 const DESKTOP_HEATMAP_WEEKS = 53;
 const PHONE_HEATMAP_WEEKS = 22;
 const PHONE_HEATMAP_QUERY = "(max-width: 640px)";
+const HISTORY_INITIAL_LOGS = 5;
+const HISTORY_LOG_INCREMENT = 5;
+const HISTORY_MAX_LOGS = 30;
 
 const ACTIVITY_TYPES = [
   { id: "board", label: "Board", weight: 1.0 },
@@ -35,6 +38,7 @@ const state = {
   syncConfigured: false,
   isSyncing: false,
   heatmapWeeks: DESKTOP_HEATMAP_WEEKS,
+  historyLogLimit: HISTORY_INITIAL_LOGS,
   lastSyncedAt: null
 };
 
@@ -482,7 +486,9 @@ function scoreToLevel(score) {
 
 function renderHistory() {
   const sorted = getVisibleLogs().sort(compareLogsDesc);
-  const recent = sorted.slice(0, 30);
+  const maxVisible = Math.min(sorted.length, HISTORY_MAX_LOGS);
+  const visibleCount = Math.min(state.historyLogLimit, maxVisible);
+  const recent = sorted.slice(0, visibleCount);
   els.historyCount.textContent = sorted.length === 1 ? "1 log" : `${sorted.length} logs`;
 
   if (recent.length === 0) {
@@ -493,7 +499,26 @@ function renderHistory() {
     return;
   }
 
-  els.historyList.replaceChildren(...recent.map(createHistoryItem));
+  const items = recent.map(createHistoryItem);
+  if (visibleCount < maxVisible) {
+    items.push(createHistoryMoreButton(visibleCount, maxVisible));
+  }
+  els.historyList.replaceChildren(...items);
+}
+
+function createHistoryMoreButton(visibleCount, maxVisible) {
+  const button = document.createElement("button");
+  const nextCount = Math.min(visibleCount + HISTORY_LOG_INCREMENT, maxVisible);
+  button.type = "button";
+  button.className = "ghost-button history-more-button";
+  button.textContent = "...";
+  button.setAttribute("aria-label", `Show ${nextCount - visibleCount} more logs`);
+  button.title = `Show ${nextCount - visibleCount} more logs`;
+  button.addEventListener("click", () => {
+    state.historyLogLimit = nextCount;
+    renderHistory();
+  });
+  return button;
 }
 
 function createHistoryItem(entry) {
@@ -917,7 +942,10 @@ function updateAccessMode() {
   els.modePill.textContent = modeLabel();
   els.syncNow.disabled = !state.syncConfigured || state.isSyncing;
   els.ownerToggle.disabled = !state.syncConfigured || state.isSyncing;
-  els.ownerToggle.textContent = state.ownerToken ? "Lock owner" : "Unlock owner";
+  const ownerToggleLabel = state.ownerToken ? "Lock owner" : "Unlock owner";
+  els.ownerToggle.classList.toggle("is-owner", Boolean(state.ownerToken));
+  els.ownerToggle.setAttribute("aria-label", ownerToggleLabel);
+  els.ownerToggle.title = ownerToggleLabel;
   els.saveEntry.disabled = !canWrite() || state.isSyncing;
   els.importTrigger.disabled = !canWrite() || state.isSyncing;
   renderActivityChipsIfReady();

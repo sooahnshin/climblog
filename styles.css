@@ -470,6 +470,34 @@ textarea {
   border-color: var(--line);
 }
 
+.icon-button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+
+.icon-button svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
+.owner-toggle-button .owner-icon-locked,
+.owner-toggle-button.is-owner .owner-icon-unlocked {
+  display: none;
+}
+
+.owner-toggle-button.is-owner .owner-icon-locked {
+  display: block;
+}
+
 .danger-button {
   color: #fff3ef;
   background: rgba(255, 107, 95, 0.13);
@@ -480,6 +508,24 @@ textarea {
   display: grid;
   gap: 10px;
   margin-top: 14px;
+}
+
+.history-more-button {
+  width: 100%;
+  min-height: 34px;
+  color: var(--muted);
+  font-size: 0;
+  line-height: 1;
+}
+
+.history-more-button::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 8px 0 0 currentColor, 16px 0 0 currentColor;
+  transform: translateX(-8px);
 }
 
 .day-entry-list {
