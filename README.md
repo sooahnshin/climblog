@@ -67,14 +67,14 @@ The repo should not contain:
 - Cloudflare account secrets
 - the owner write token
 
-The public API URL is not secret because public read is intentional. The write token is the write boundary. This repo may include a live `config.js` for the owner's deployed app; cloners should replace it with their own Worker URL before deploying.
+The public API URL is not a write secret because public read is intentional, but it can reveal which Worker serves the shared logs. Keep the checked-in `config.js` in local-only/template mode unless you are comfortable with everyone reading from that Worker. The write token remains the write boundary.
 
 ## Files
 
 - `index.html` - app shell
 - `styles.css` - layout, heatmap, owner mode, and controls
 - `app.js` - logging, heatmap scoring, local cache, backup import/export, and sync
-- `config.js` - active frontend sync config
+- `config.js` - checked-in frontend sync config; blank by default for local-only/template mode
 - `config.example.js` - placeholder config for template users
 - `worker/worker.js` - public-read / owner-write Cloudflare Worker API
 - `worker/wrangler.example.toml` - example Worker deployment config
@@ -107,11 +107,11 @@ High-level setup:
 1. Create your own Cloudflare KV namespace.
 2. Deploy `worker/worker.js` with a `CLIMBLOG_KV` binding.
 3. Store your owner write token as the `CLIMBLOG_WRITE_TOKEN` Worker secret.
-4. Set your Worker URL in `config.js`.
+4. Set your Worker URL in your deployment's `config.js`.
 5. Deploy the static frontend with GitHub Pages.
 6. Unlock owner mode on your phone/Mac with the same token.
 
-If you clone a public copy of this repo, replace `config.js` with your own Worker URL before deploying. Otherwise your copy may read from the original public endpoint. `config.example.js` is the placeholder starting point for your own config.
+If you clone a public copy of this repo, copy `config.example.js` to `config.js` and replace the placeholder with your own Worker URL before deploying. The checked-in `config.js` intentionally does not point at a live API.
 
 ## GitHub Pages
 

@@ -24,7 +24,7 @@ Your phone/Mac browser:
   saved owner token + local cache
 ```
 
-Do not commit real logs, backup files, Cloudflare account secrets, or the owner write token. It is OK for the repo to include a live `config.js` for the owner's own deployed app because that file only contains a public-read API URL. Template users still need to replace it with their own Worker URL.
+Do not commit real logs, backup files, Cloudflare account secrets, the owner write token, or a live Worker URL that you do not want people to associate with your logs. The checked-in `config.js` is blank so the public template runs in local-only mode until someone adds their own Worker URL.
 
 ## Prerequisites
 
@@ -42,9 +42,7 @@ npx wrangler login
 
 Create your own copy of the repo.
 
-This repo can be both someone's live personal app and a reusable template. If the repo includes a real `config.js`, treat it as the original owner's live frontend config, not as your config.
-
-Before deploying your own copy, replace `config.js` with your own Worker URL. The API URL is public-read by design, so a stale `config.js` may point your app at someone else's public logs. You still cannot write without their owner token, but your own deployment should use your own Worker/KV pair.
+Before deploying your own copy, replace the blank `config.js` with your own Worker URL. The API URL is public-read by design, so committing someone else's Worker URL may point your app at someone else's public logs. You still cannot write without their owner token, but your own deployment should use your own Worker/KV pair.
 
 ## 2. Create Cloudflare KV
 
@@ -158,12 +156,7 @@ window.CLIMBLOG_CONFIG = {
 };
 ```
 
-The API URL is public. The owner token is not.
-
-For a repo that is both a live app and a reusable template, keep both files:
-
-- `config.js` points the owner's deployed frontend at the owner's Worker.
-- `config.example.js` is the placeholder cloners copy and edit for their own Worker.
+The API URL is public-read. It is not a write secret, but it can reveal where your public logs are served. The owner token is private and must never be committed.
 
 ## 7. Deploy GitHub Pages
 
@@ -199,6 +192,6 @@ The token is saved only in that browser's local storage for your ClimbLog site. 
 
 ## Template Caveat
 
-Because the API is public-read, your Worker URL is not secret. If someone clones a repo that still points at your Worker URL, their copy may read your public logs. They still cannot write without your owner token.
+Because the API is public-read, anyone who knows your Worker URL can read the shared log JSON. They still cannot write without your owner token.
 
-If you want the same repo to act as your live app and as a template, committing your real `config.js` is acceptable as long as you are comfortable with the Worker URL being public. Keep `config.example.js` and this guide so every cloner knows they must replace `config.js` before deploying.
+For a public template, keep `config.js` blank and keep real deployment details outside the committed repo. Keep `config.example.js` and this guide so every cloner knows they must use their own Worker/KV pair.
