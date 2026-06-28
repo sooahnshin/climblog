@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./icons/icon.svg" alt="ClimbLog icon" width="96" height="96">
+</p>
+
 # ClimbLog
 
 ClimbLog is a tiny installable web app for logging climbing training and showing a widget-style activity heatmap.
