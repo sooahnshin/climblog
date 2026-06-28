@@ -131,7 +131,7 @@ High-level setup:
 3. Store your owner write token as the `CLIMBLOG_WRITE_TOKEN` Worker secret.
 4. Set your Worker URL in your deployment's `config.js`.
 5. Deploy the static frontend with GitHub Pages.
-6. Unlock owner mode on your phone/Mac with the same token.
+6. Click the unlock icon (`Unlock owner`) on your phone/Mac with the same token.
 
 If you clone a public copy of this repo, copy `config.example.js` to `config.js` and replace the placeholder with your own Worker URL before deploying. The checked-in `config.js` points at the sample endpoint so the demo works immediately, but your own deployment should use your own Worker/KV pair.
 

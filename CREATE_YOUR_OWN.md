@@ -176,18 +176,18 @@ https://<github-username>.github.io/climblog/
 
 ## 8. Unlock Owner Mode
 
-Open ClimbLog on your phone or Mac, click `Unlock owner`, and paste the same owner token you stored in Cloudflare.
+Open ClimbLog on your phone or Mac, click the unlock icon (`Unlock owner`), and paste the same owner token you stored in Cloudflare.
 
 The token is saved only in that browser's local storage for your ClimbLog site. Public visitors do not have the token, so they can read the heatmap and logs but cannot write.
 
 ## 9. Verify Sync
 
-1. Unlock owner mode on your first device.
+1. Click the unlock icon (`Unlock owner`) on your first device.
 2. Add one log.
-3. Click `Sync now`.
+3. Click the sync icon (`Sync now`).
 4. Open `/logs` on your Worker URL and confirm the log appears in JSON.
 5. Open ClimbLog on your second device.
-6. Refresh or click `Sync now`.
+6. Refresh or click the sync icon (`Sync now`).
 7. Confirm the same log appears.
 
 ## Template Caveat
