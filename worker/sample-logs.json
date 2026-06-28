@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-27T12:00:00.000Z",
+  "logs": [
+    {
+      "id": "sample-2026-06-20-bouldering",
+      "date": "2026-06-20",
+      "type": "bouldering",
+      "durationMinutes": 90,
+      "notes": "Sample bouldering session.",
+      "createdAt": "2026-06-20T18:00:00.000Z",
+      "updatedAt": "2026-06-20T18:00:00.000Z"
+    },
+    {
+      "id": "sample-2026-06-22-hangboard",
+      "date": "2026-06-22",
+      "type": "hangboard",
+      "durationMinutes": 30,
+      "notes": "Sample finger strength session.",
+      "createdAt": "2026-06-22T18:00:00.000Z",
+      "updatedAt": "2026-06-22T18:00:00.000Z"
+    },
+    {
+      "id": "sample-2026-06-25-stretching",
+      "date": "2026-06-25",
+      "type": "stretching",
+      "durationMinutes": 20,
+      "notes": "Sample recovery session.",
+      "createdAt": "2026-06-25T18:00:00.000Z",
+      "updatedAt": "2026-06-25T18:00:00.000Z"
+    }
+  ]
+}

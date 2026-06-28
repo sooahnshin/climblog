@@ -30,8 +30,9 @@ async function handleRequest(request, env) {
     return json({ error: "Not found" }, 404, env);
   }
 
-  if (!env.CLIMBLOG_KV) {
-    return json({ error: "Missing CLIMBLOG_KV binding" }, 500, env);
+  const kv = getKvNamespace(env);
+  if (!kv) {
+    return json({ error: "Missing CLIMBLOG_KV or climblog_sample_kv binding" }, 500, env);
   }
 
   if (request.method === "GET") {
@@ -52,7 +53,7 @@ async function handleRequest(request, env) {
       logs: mergeLogs(existing.logs, incoming.logs)
     };
 
-    await env.CLIMBLOG_KV.put(DATA_KEY, JSON.stringify(merged));
+    await kv.put(DATA_KEY, JSON.stringify(merged));
     return json(merged, 200, env);
   }
 
@@ -60,8 +61,13 @@ async function handleRequest(request, env) {
 }
 
 async function readDocument(env) {
-  const stored = await env.CLIMBLOG_KV.get(DATA_KEY, "json");
+  const kv = getKvNamespace(env);
+  const stored = await kv.get(DATA_KEY, "json");
   return normalizeDocument(stored);
+}
+
+function getKvNamespace(env) {
+  return env.CLIMBLOG_KV || env.climblog_sample_kv;
 }
 
 async function readJson(request) {
